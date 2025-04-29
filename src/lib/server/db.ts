@@ -42,6 +42,44 @@ export async function calculateNewRatings(winnerElo: number, loserElo: number) {
 	};
 }
 
+export async function getBattleById(battleId: string) {
+	const db = await connectToDatabase();
+	
+	// Find the battle by ID
+	const battle = await db.collection('battles').findOne({ _id: new ObjectId(battleId) });
+	
+	if (!battle) {
+		throw new Error('Battle not found');
+	}
+	
+	return battle;
+}
+
+export async function deleteBattle(battleId: string) {
+	const db = await connectToDatabase();
+
+	// Delete the battle from the database
+	const result = await db.collection('battles').deleteOne({ _id: new ObjectId(battleId) });
+
+	if (result.deletedCount === 0) {
+		throw new Error('Battle not found');
+	}
+}
+
+export async function createBattleRecord(leftId: string, rightId: string) {
+	const db = await connectToDatabase();
+	
+	// Create a new battle record
+	const battle = {
+		leftId,
+		rightId,
+		createdAt: new Date()
+	};
+
+	const result = await db.collection('battles').insertOne(battle);
+	return { ...battle, _id: result.insertedId };
+}
+
 export async function getOrCreateBrainrotRecord(brainrotId: string): Promise<BrainrotRecord> {
 	const db = await connectToDatabase();
 	

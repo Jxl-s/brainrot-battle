@@ -4,7 +4,7 @@
 
 <svelte:head>
 	<title>Brainrot Battle</title>
-	<meta name="description" content="Battle and rank your favorite images using ELO rating system" />
+	<meta name="description" content="Battle and rank your favorite brainrot using ELO rating system" />
 </svelte:head>
 
 <main class="min-h-screen">
@@ -16,7 +16,7 @@
 					Brainrot Battle
 				</h1>
 				<p class="mb-8 text-xl text-gray-300">
-					Join the ultimate image ranking tournament! Battle your favorite images and discover which ones truly
+					Join the ultimate brainrot ranking tournament! Battle your favorite brainrot and discover which ones truly
 					stand out using our ELO rating system.
 				</p>
 				<div class="flex gap-4">
@@ -72,7 +72,7 @@
 				</div>
 				<div class="ml-4">
 					<h3 class="mb-2 text-xl font-bold text-gray-100">Choose Your Battle</h3>
-					<p class="text-gray-300">Select two images to battle against each other</p>
+					<p class="text-gray-300">Select two brainrot to battle against each other</p>
 				</div>
 			</div>
 			<div class="mb-8 flex items-center">
@@ -81,7 +81,7 @@
 				</div>
 				<div class="ml-4">
 					<h3 class="mb-2 text-xl font-bold text-gray-100">Vote for the Winner</h3>
-					<p class="text-gray-300">Pick your favorite image from the pair</p>
+					<p class="text-gray-300">Pick your favorite brainrot from the pair</p>
 				</div>
 			</div>
 			<div class="flex items-center">
@@ -100,7 +100,7 @@
 	<section class="container-padding py-20 text-center">
 		<h2 class="mb-6 text-4xl font-bold text-gray-100">Ready to Start?</h2>
 		<p class="mb-8 text-xl text-gray-300">
-			Join the community and help determine which images truly deserve the top spot!
+			Join the community and help determine which brainrot truly deserve the top spot!
 		</p>
 		<a href="/battle" class="btn-primary glow"> Enter the Battle </a>
 	</section>

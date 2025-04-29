@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getRandomPair, getOrCreateBrainrotRecord } from '$lib/server/db';
+import { getRandomPair, getOrCreateBrainrotRecord, createBattleRecord } from '$lib/server/db';
 import { getBrainrotById } from '$lib/data/brainrots';
 
 export const GET: RequestHandler = async () => {
@@ -18,11 +18,18 @@ export const GET: RequestHandler = async () => {
 			return json({ error: 'Brainrot data not found' }, { status: 404 });
 		}
 
+		// Create the battle record
+		const battleRecord = await createBattleRecord(leftBrainrot.id, rightBrainrot.id);
+		if (!battleRecord) {
+			return json({ error: 'Failed to create battle record' }, { status: 500 });
+		}
+
 		// Get the ELO ratings from the database
 		const leftRecord = await getOrCreateBrainrotRecord(pair.left);
 		const rightRecord = await getOrCreateBrainrotRecord(pair.right);
 
 		return json({
+			id: battleRecord._id,
 			left: {
 				id: leftBrainrot.id,
 				url: leftBrainrot.imageUrl,

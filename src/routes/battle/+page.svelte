@@ -10,17 +10,18 @@
 	}
 
 	interface Battle {
+		id: string; // Added battle ID
 		left: Brainrot;
 		right: Brainrot;
 	}
 
 	let currentBattle: Battle | null = null;
 	let isVoting = false;
-	let clickedId: string | null = null;
+	let clickedSide: 'left' | 'right' | null = null;
 
-	async function handleVote(winnerId: string) {
+	async function handleVote(side: 'left' | 'right') {
 		if (isVoting || !currentBattle) return;
-		clickedId = winnerId;
+		clickedSide = side;
 		isVoting = true;
 
 		try {
@@ -30,22 +31,21 @@
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					leftId: currentBattle.left.id,
-					rightId: currentBattle.right.id,
-					winnerId
+					battleId: currentBattle.id,
+					winningSide: side
 				})
 			});
 
 			if (!response.ok) throw new Error('Failed to submit vote');
 
 			setTimeout(async () => {
-				clickedId = null;
+				clickedSide = null;
 				await fetchNewBattle();
 				isVoting = false;
 			}, 600); // Let animation play longer
 		} catch (error) {
 			console.error('Error voting:', error);
-			clickedId = null;
+			clickedSide = null;
 			isVoting = false;
 		}
 	}
@@ -72,7 +72,7 @@
 
 <svelte:head>
 	<title>Battle - Brainrot Battle</title>
-	<meta name="description" content="Battle and rank your favorite images using ELO rating system" />
+	<meta name="description" content="Battle and rank your favorite brainrot using ELO rating system" />
 </svelte:head>
 
 <main class="min-h-screen py-8">
@@ -90,10 +90,10 @@
 					<!-- Left Image -->
 					<button
 						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedId === currentBattle.left.id ? 'scale-110 winner' :
-							clickedId && clickedId !== currentBattle.left.id ? 'loser' : ''
+							clickedSide === 'left' ? 'scale-110 winner' :
+							clickedSide && clickedSide !== 'left' ? 'loser' : ''
 						}`}
-						on:click={() => handleVote(currentBattle.left.id)}
+						on:click={() => handleVote('left')}
 						disabled={isVoting}
 					>
 						<img
@@ -102,7 +102,7 @@
 							class="h-full w-full object-cover"
 						/>
 
-						{#if clickedId === currentBattle.left.id}
+						{#if clickedSide === 'left'}
 							<!-- Checkmark -->
 							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -119,10 +119,10 @@
 					<!-- Right Image -->
 					<button
 						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedId === currentBattle.right.id ? 'scale-110 winner' :
-							clickedId && clickedId !== currentBattle.right.id ? 'loser' : ''
+							clickedSide === 'right' ? 'scale-110 winner' :
+							clickedSide && clickedSide !== 'right' ? 'loser' : ''
 						}`}
-						on:click={() => handleVote(currentBattle.right.id)}
+						on:click={() => handleVote('right')}
 						disabled={isVoting}
 					>
 						<img
@@ -131,7 +131,7 @@
 							class="h-full w-full object-cover"
 						/>
 
-						{#if clickedId === currentBattle.right.id}
+						{#if clickedSide === 'right'}
 							<!-- Checkmark -->
 							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

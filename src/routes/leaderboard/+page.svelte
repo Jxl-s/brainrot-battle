@@ -39,7 +39,7 @@
 			<h1 class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent">
 				Global Leaderboard
 			</h1>
-			<p class="text-gray-300">See which brainrots are dominating the competition!</p>
+			<p class="text-gray-300">See which brainrot is dominating the competition!</p>
 		</div>
 
 		{#if loading}
@@ -48,7 +48,7 @@
 			</div>
 		{:else if leaderboard.length === 0}
 			<div class="text-center">
-				<p class="text-gray-300">No brainrots have battled yet!</p>
+				<p class="text-gray-300">No brainrot have battled yet!</p>
 			</div>
 		{:else}
 			<!-- Leaderboard Table -->
