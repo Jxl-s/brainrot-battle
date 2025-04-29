@@ -127,7 +127,7 @@
 	<title>Battle - Brainrot Battle</title>
 	<meta
 		name="description"
-		content="Battle and rank your favorite brainrot using ELO rating system"
+		content="Battle and rank your favorite brainrot through an ELO system."
 	/>
 </svelte:head>
 
