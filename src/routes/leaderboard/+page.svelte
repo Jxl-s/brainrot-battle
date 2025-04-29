@@ -43,15 +43,44 @@
 		</div>
 
 		{#if loading}
-			<div class="text-center">
-				<p class="text-gray-300">Loading leaderboard...</p>
+			<!-- Skeleton Loader -->
+			<div class="mx-auto max-w-4xl overflow-hidden rounded-lg bg-gray-800 shadow-xl">
+				<table class="w-full animate-pulse">
+					<thead>
+						<tr class="border-b border-gray-700 bg-gray-900">
+							<th class="px-6 py-4 text-left text-sm font-semibold text-gray-300">Rank</th>
+							<th class="px-6 py-4 text-left text-sm font-semibold text-gray-300">Image</th>
+							<th class="px-6 py-4 text-left text-sm font-semibold text-gray-300">Name</th>
+							<th class="px-6 py-4 text-left text-sm font-semibold text-gray-300">ELO Rating</th>
+						</tr>
+					</thead>
+					<tbody>
+						{#each Array(5) as _, i}
+							<tr class="border-b border-gray-700">
+								<td class="px-6 py-4">
+									<div class="h-8 w-8 rounded-full bg-gray-700"></div>
+								</td>
+								<td class="px-6 py-4">
+									<div class="h-16 w-16 rounded-lg bg-gray-700"></div>
+								</td>
+								<td class="px-6 py-4">
+									<div class="mb-2 h-4 w-32 rounded bg-gray-700"></div>
+									<div class="h-3 w-48 rounded bg-gray-700"></div>
+								</td>
+								<td class="px-6 py-4">
+									<div class="h-5 w-16 rounded bg-gray-700"></div>
+								</td>
+							</tr>
+						{/each}
+					</tbody>
+				</table>
 			</div>
 		{:else if leaderboard.length === 0}
 			<div class="text-center">
 				<p class="text-gray-300">No brainrot have battled yet!</p>
 			</div>
 		{:else}
-			<!-- Leaderboard Table -->
+			<!-- Actual Leaderboard Table -->
 			<div class="mx-auto max-w-4xl overflow-hidden rounded-lg bg-gray-800 shadow-xl">
 				<table class="w-full">
 					<thead>
@@ -66,18 +95,12 @@
 						{#each leaderboard as entry}
 							<tr class="border-b border-gray-700 transition-colors hover:bg-gray-700">
 								<td class="px-6 py-4">
-									<span
-										class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white"
-									>
+									<span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
 										{entry.rank}
 									</span>
 								</td>
 								<td class="px-6 py-4">
-									<img
-										src={entry.url}
-										alt={entry.name}
-										class="h-16 w-16 rounded-lg object-cover"
-									/>
+									<img src={entry.url} alt={entry.name} class="h-16 w-16 rounded-lg object-cover" />
 								</td>
 								<td class="px-6 py-4">
 									<div>
@@ -95,4 +118,4 @@
 			</div>
 		{/if}
 	</div>
-</main> 
+</main>

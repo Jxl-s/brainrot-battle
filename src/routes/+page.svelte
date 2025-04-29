@@ -1,7 +1,3 @@
-<script>
-	import { onMount } from 'svelte';
-</script>
-
 <svelte:head>
 	<title>Brainrot Battle</title>
 	<meta
@@ -161,12 +157,3 @@
 		<p>&copy; {new Date().getFullYear()} Jia Xuan Li. All rights reserved.</p>
 	</footer>
 </main>
-
-<style>
-	:global(body) {
-		margin: 0;
-		font-family:
-			-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
-			'Helvetica Neue', sans-serif;
-	}
-</style>

@@ -134,7 +134,9 @@
 <main class="min-h-screen py-8">
 	<div class="container-padding">
 		<div class="mb-8 text-center">
-			<h1 class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent">
+			<h1
+				class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent"
+			>
 				Choose Your Winner
 			</h1>
 			<p class="text-gray-300">Click on the image you think deserves to win!</p>
@@ -184,15 +186,28 @@
 						</div>
 
 						<!-- Name -->
-						<div class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white">
+						<div
+							class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white"
+						>
 							{currentBattle.left.name}
 						</div>
 
 						{#if clickedSide === 'left'}
 							<div class="checkmark animate-pop absolute inset-0 flex items-center justify-center">
 								<div class="rounded-full bg-green-500 p-3 shadow-lg">
-									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-6 w-6 text-white"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="3"
+											d="M5 13l4 4L19 7"
+										/>
 									</svg>
 								</div>
 							</div>
@@ -240,15 +255,28 @@
 						</div>
 
 						<!-- Name -->
-						<div class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white">
+						<div
+							class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white"
+						>
 							{currentBattle.right.name}
 						</div>
 
 						{#if clickedSide === 'right'}
 							<div class="checkmark animate-pop absolute inset-0 flex items-center justify-center">
 								<div class="rounded-full bg-green-500 p-3 shadow-lg">
-									<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-6 w-6 text-white"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="3"
+											d="M5 13l4 4L19 7"
+										/>
 									</svg>
 								</div>
 							</div>
@@ -258,7 +286,9 @@
 
 				<!-- VS Badge -->
 				<div class="relative">
-					<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 px-6 py-2 text-xl font-bold text-white shadow-lg">
+					<div
+						class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 px-6 py-2 text-xl font-bold text-white shadow-lg"
+					>
 						VS
 					</div>
 				</div>
@@ -271,8 +301,13 @@
 				</button>
 			</div>
 		{:else}
-			<div class="text-center">
-				<p class="text-gray-300">Loading battle...</p>
+			<!-- Skeleton battle layout -->
+			<div class="mx-auto flex max-w-6xl animate-pulse flex-col items-center">
+				<div class="grid w-full max-w-4xl gap-8 md:grid-cols-2">
+					<div class="relative h-72 w-full rounded-lg bg-gray-700"></div>
+					<div class="relative h-72 w-full rounded-lg bg-gray-700"></div>
+				</div>
+				<div class="mt-4 h-10 w-32 rounded-full bg-gray-700"></div>
 			</div>
 		{/if}
 	</div>
