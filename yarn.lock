@@ -288,6 +288,11 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@lucide/svelte@^0.503.0":
+  version "0.503.0"
+  resolved "https://registry.yarnpkg.com/@lucide/svelte/-/svelte-0.503.0.tgz#c3cd1c06e4db83a8c5e812217f26f51b711eef4d"
+  integrity sha512-Y7Q8pHnX2YG8Ef4a/VnYFN9tTAJS33MiS78vQtPiyp5iiWuBlTMoViMiRUxQb7U9Ro46RdJ0kpCADvvha3Z2rA==
+
 "@mongodb-js/saslprep@^1.1.9":
   version "1.2.2"
   resolved "https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.2.2.tgz"

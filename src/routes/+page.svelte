@@ -1,3 +1,7 @@
+<script>
+	import { SwordIcon, TrophyIcon } from '@lucide/svelte';
+</script>
+
 <svelte:head>
 	<title>Brainrot Battle</title>
 	<meta
@@ -21,8 +25,15 @@
 					which ones truly stand out using our ELO rating system.
 				</p>
 				<div class="flex gap-4">
-					<a href="/battle" class="btn-primary glow"> Start Battling </a>
-					<a href="/leaderboard" class="btn-primary glow"> View Leaderboard </a>
+					<a href="/battle" class="btn-primary glow">
+						<SwordIcon class="me-2 h-6 w-6" />
+						Start Battling
+					</a>
+
+					<a href="/leaderboard" class="btn-secondary glow">
+						<TrophyIcon class="me-2 h-6 w-6" />
+						View Leaderboard
+					</a>
 				</div>
 			</div>
 			<div class="relative">
