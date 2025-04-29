@@ -6,7 +6,8 @@
   <div class="container-padding">
     <div class="flex h-16 items-center justify-between">
       <!-- Logo/Brand -->
-      <a href="/" class="flex items-center space-x-2">
+      <a href="/" class="flex items-center space-x-2 flex items-center gap-1">
+        <img src="/favicon.png" alt="Logo" class="h-8 w-8" />
         <span class="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-xl font-bold text-transparent">
           Brainrot Battle
         </span>

@@ -27,7 +27,7 @@
 			<div class="relative">
 				<div class="glow w-full overflow-hidden rounded-lg">
 					<img
-						src="/hero.png"
+						src="/hero.webp"
 						alt="Brainrot Battle Hero"
 						class="h-full w-full object-cover"
 					/>
