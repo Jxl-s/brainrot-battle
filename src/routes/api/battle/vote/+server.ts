@@ -27,9 +27,8 @@ export const POST: RequestHandler = async ({ request }) => {
         const loserId = winningSide === 'left' ? battle.rightId : battle.leftId;
 
         // Record the battle result
-		console.log("winnerId", winnerId);
-		console.log("loserId", loserId);
         await recordBattleResult(winnerId, loserId);
+
 		// delete the battle
 		await deleteBattle(battleId);
         return json({ success: true });

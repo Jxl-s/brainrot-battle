@@ -10,44 +10,72 @@
 	}
 
 	interface Battle {
-		id: string; // Added battle ID
+		id: string;
 		left: Brainrot;
 		right: Brainrot;
+	}
+
+	const K_FACTOR = 32;
+
+	function calculateNewRatings(winnerElo: number, loserElo: number) {
+		const expectedWinner = 1 / (1 + Math.pow(10, (loserElo - winnerElo) / 400));
+		const expectedLoser = 1 / (1 + Math.pow(10, (winnerElo - loserElo) / 400));
+
+		const newWinnerElo = Math.round(winnerElo + K_FACTOR * (1 - expectedWinner));
+		const newLoserElo = Math.round(loserElo + K_FACTOR * (0 - expectedLoser));
+
+		return {
+			winnerElo: newWinnerElo,
+			loserElo: newLoserElo
+		};
 	}
 
 	let currentBattle: Battle | null = null;
 	let isVoting = false;
 	let clickedSide: 'left' | 'right' | null = null;
 
+	let leftEloDelta = 0;
+	let rightEloDelta = 0;
+
 	async function handleVote(side: 'left' | 'right') {
 		if (isVoting || !currentBattle) return;
 		clickedSide = side;
 		isVoting = true;
 
+		// Local visualization
+		const { winnerElo, loserElo } = calculateNewRatings(
+			side === 'left' ? currentBattle.left.elo : currentBattle.right.elo,
+			side === 'left' ? currentBattle.right.elo : currentBattle.left.elo
+		);
+
+		if (side === 'left') {
+			leftEloDelta = winnerElo - currentBattle.left.elo;
+			rightEloDelta = loserElo - currentBattle.right.elo;
+		} else {
+			rightEloDelta = winnerElo - currentBattle.right.elo;
+			leftEloDelta = loserElo - currentBattle.left.elo;
+		}
+
 		try {
-			const response = await fetch('/api/battle/vote', {
+			await fetch('/api/battle/vote', {
 				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
+				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					battleId: currentBattle.id,
 					winningSide: side
 				})
 			});
-
-			if (!response.ok) throw new Error('Failed to submit vote');
-
-			setTimeout(async () => {
-				clickedSide = null;
-				await fetchNewBattle();
-				isVoting = false;
-			}, 600); // Let animation play longer
 		} catch (error) {
 			console.error('Error voting:', error);
-			clickedSide = null;
-			isVoting = false;
 		}
+
+		setTimeout(async () => {
+			clickedSide = null;
+			leftEloDelta = 0;
+			rightEloDelta = 0;
+			await fetchNewBattle();
+			isVoting = false;
+		}, 600);
 	}
 
 	async function fetchNewBattle() {
@@ -72,26 +100,34 @@
 
 <svelte:head>
 	<title>Battle - Brainrot Battle</title>
-	<meta name="description" content="Battle and rank your favorite brainrot using ELO rating system" />
+	<meta
+		name="description"
+		content="Battle and rank your favorite brainrot using ELO rating system"
+	/>
 </svelte:head>
 
 <main class="min-h-screen py-8">
 	<div class="container-padding">
 		<div class="mb-8 text-center">
-			<h1 class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent">
+			<h1
+				class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent"
+			>
 				Choose Your Winner
 			</h1>
 			<p class="text-gray-300">Click on the image you think deserves to win!</p>
 		</div>
 
 		{#if currentBattle}
-			<div class="mx-auto max-w-6xl">
-				<div class="grid gap-8 md:grid-cols-2">
-					<!-- Left Image -->
+			<div class="mx-auto flex max-w-6xl flex-col items-center">
+				<div class="grid w-full max-w-4xl gap-8 md:grid-cols-2">
+					<!-- Left -->
 					<button
-						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedSide === 'left' ? 'scale-110 winner' :
-							clickedSide && clickedSide !== 'left' ? 'loser' : ''
+						class={`battle-card group relative transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
+							clickedSide === 'left'
+								? 'winner scale-110'
+								: clickedSide && clickedSide !== 'left'
+									? 'loser'
+									: ''
 						}`}
 						on:click={() => handleVote('left')}
 						disabled={isVoting}
@@ -99,28 +135,56 @@
 						<img
 							src={currentBattle.left.url}
 							alt={currentBattle.left.name}
-							class="h-full w-full object-cover"
+							class="h-full w-full rounded object-cover"
 						/>
 
+						<!-- ELO label -->
+						<div
+							class={`absolute top-4 left-4 flex transform items-center gap-1 rounded bg-black/60 px-3 py-1 text-sm ${
+								clickedSide === 'left'
+									? 'font-bold text-green-400'
+									: clickedSide === 'right'
+										? 'font-bold text-red-400'
+										: 'text-white'
+							}`}
+						>
+							ELO:
+							{clickedSide ? currentBattle.left.elo + leftEloDelta : currentBattle.left.elo}
+
+							{#if clickedSide && leftEloDelta !== 0}
+								<span class="animate-elo-change text-xs">
+									{leftEloDelta > 0 ? '+' : ''}{leftEloDelta}
+								</span>
+							{/if}
+						</div>
+
+						<!-- Name label -->
+						<div
+							class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white"
+						>
+							{currentBattle.left.name}
+						</div>
+
 						{#if clickedSide === 'left'}
-							<!-- Checkmark -->
-							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<div class="checkmark absolute inset-0 flex items-center justify-center animate-pop">
+							<div class="bg-green-500 rounded-full p-3 shadow-lg">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
 								</svg>
 							</div>
-						{/if}
-
-						<div class="elo-badge">
-							<p class="text-white">ELO: {currentBattle.left.elo}</p>
 						</div>
+						
+						{/if}
 					</button>
 
-					<!-- Right Image -->
+					<!-- Right -->
 					<button
-						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedSide === 'right' ? 'scale-110 winner' :
-							clickedSide && clickedSide !== 'right' ? 'loser' : ''
+						class={`battle-card group relative transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
+							clickedSide === 'right'
+								? 'winner scale-110'
+								: clickedSide && clickedSide !== 'right'
+									? 'loser'
+									: ''
 						}`}
 						on:click={() => handleVote('right')}
 						disabled={isVoting}
@@ -128,28 +192,63 @@
 						<img
 							src={currentBattle.right.url}
 							alt={currentBattle.right.name}
-							class="h-full w-full object-cover"
+							class="h-full w-full rounded object-cover"
 						/>
 
+						<!-- ELO label -->
+						<div
+							class={`absolute top-4 left-4 flex transform items-center gap-1 rounded bg-black/60 px-3 py-1 text-sm ${
+								clickedSide === 'right'
+									? 'font-bold text-green-400'
+									: clickedSide === 'left'
+										? 'font-bold text-red-400'
+										: 'text-white'
+							}`}
+						>
+							ELO:
+							{clickedSide ? currentBattle.right.elo + rightEloDelta : currentBattle.right.elo}
+
+							{#if clickedSide && rightEloDelta !== 0}
+								<span class="animate-elo-change text-xs">
+									{rightEloDelta > 0 ? '+' : ''}{rightEloDelta}
+								</span>
+							{/if}
+						</div>
+
+						<!-- Name label -->
+						<div
+							class="absolute bottom-4 left-1/2 -translate-x-1/2 transform rounded bg-black/60 px-3 py-1 text-sm text-white"
+						>
+							{currentBattle.right.name}
+						</div>
+
 						{#if clickedSide === 'right'}
-							<!-- Checkmark -->
-							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
-								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
-								</svg>
+							<div class="checkmark animate-pop absolute inset-0 flex items-center justify-center">
+								<div class="rounded-full bg-green-500 p-3 shadow-lg">
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-6 w-6 text-white"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+									>
+										<path
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											stroke-width="3"
+											d="M5 13l4 4L19 7"
+										/>
+									</svg>
+								</div>
 							</div>
 						{/if}
-
-						<div class="elo-badge">
-							<p class="text-white">ELO: {currentBattle.right.elo}</p>
-						</div>
 					</button>
 				</div>
 
 				<!-- VS Badge -->
 				<div class="relative">
 					<div
-						class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 px-6 py-2 text-xl font-bold text-white shadow-lg"
+						class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500 px-6 py-2 text-xl font-bold text-white shadow-lg"
 					>
 						VS
 					</div>
@@ -158,11 +257,7 @@
 
 			<!-- Skip Button -->
 			<div class="mt-8 text-center">
-				<button
-					class="btn-primary"
-					on:click={handleSkip}
-					disabled={isVoting}
-				>
+				<button class="btn-primary" on:click={handleSkip} disabled={isVoting}>
 					Skip This Battle
 				</button>
 			</div>
@@ -176,7 +271,7 @@
 
 <style>
 	.winner {
-		background-color: rgba(34, 197, 94, 0.1); /* Tailwind green-500 */
+		background-color: rgba(34, 197, 94, 0.1);
 		border: 2px solid rgba(34, 197, 94, 0.7);
 	}
 
@@ -201,5 +296,20 @@
 		100% {
 			transform: scale(1);
 		}
+	}
+
+	@keyframes eloChange {
+		from {
+			opacity: 0;
+			transform: translateY(-4px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-elo-change {
+		animation: eloChange 0.3s ease-out;
 	}
 </style>
