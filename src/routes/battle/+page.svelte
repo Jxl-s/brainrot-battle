@@ -38,12 +38,11 @@
 
 			if (!response.ok) throw new Error('Failed to submit vote');
 
-			// Let the pop animation play out before fetching new battle
 			setTimeout(async () => {
 				clickedId = null;
 				await fetchNewBattle();
 				isVoting = false;
-			}, 200);
+			}, 600); // Let animation play longer
 		} catch (error) {
 			console.error('Error voting:', error);
 			clickedId = null;
@@ -78,7 +77,6 @@
 
 <main class="min-h-screen py-8">
 	<div class="container-padding">
-		<!-- Header -->
 		<div class="mb-8 text-center">
 			<h1 class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent">
 				Choose Your Winner
@@ -91,8 +89,9 @@
 				<div class="grid gap-8 md:grid-cols-2">
 					<!-- Left Image -->
 					<button
-						class={`battle-card group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedId === currentBattle.left.id ? 'scale-110' : ''
+						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
+							clickedId === currentBattle.left.id ? 'scale-110 winner' :
+							clickedId && clickedId !== currentBattle.left.id ? 'loser' : ''
 						}`}
 						on:click={() => handleVote(currentBattle.left.id)}
 						disabled={isVoting}
@@ -102,6 +101,16 @@
 							alt={currentBattle.left.name}
 							class="h-full w-full object-cover"
 						/>
+
+						{#if clickedId === currentBattle.left.id}
+							<!-- Checkmark -->
+							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+								</svg>
+							</div>
+						{/if}
+
 						<div class="elo-badge">
 							<p class="text-white">ELO: {currentBattle.left.elo}</p>
 						</div>
@@ -109,8 +118,9 @@
 
 					<!-- Right Image -->
 					<button
-						class={`battle-card group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
-							clickedId === currentBattle.right.id ? 'scale-110' : ''
+						class={`battle-card relative group transform transition duration-150 ease-in-out hover:scale-[1.02] active:scale-95 ${
+							clickedId === currentBattle.right.id ? 'scale-110 winner' :
+							clickedId && clickedId !== currentBattle.right.id ? 'loser' : ''
 						}`}
 						on:click={() => handleVote(currentBattle.right.id)}
 						disabled={isVoting}
@@ -120,6 +130,16 @@
 							alt={currentBattle.right.name}
 							class="h-full w-full object-cover"
 						/>
+
+						{#if clickedId === currentBattle.right.id}
+							<!-- Checkmark -->
+							<div class="checkmark absolute top-2 left-2 bg-green-500 rounded-full p-2 animate-pop">
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+								</svg>
+							</div>
+						{/if}
+
 						<div class="elo-badge">
 							<p class="text-white">ELO: {currentBattle.right.elo}</p>
 						</div>
@@ -153,3 +173,33 @@
 		{/if}
 	</div>
 </main>
+
+<style>
+	.winner {
+		background-color: rgba(34, 197, 94, 0.1); /* Tailwind green-500 */
+		border: 2px solid rgba(34, 197, 94, 0.7);
+	}
+
+	.loser {
+		opacity: 0.4;
+		filter: grayscale(80%);
+	}
+
+	.animate-pop {
+		animation: pop 0.25s ease-out;
+	}
+
+	@keyframes pop {
+		0% {
+			transform: scale(0);
+			opacity: 0;
+		}
+		50% {
+			transform: scale(1.2);
+			opacity: 1;
+		}
+		100% {
+			transform: scale(1);
+		}
+	}
+</style>
