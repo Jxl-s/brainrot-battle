@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { Github } from '@lucide/svelte';
 </script>
 
 <nav class="bg-gray-900 border-b border-gray-800">
@@ -39,7 +40,16 @@
         >
           Leaderboard
         </a>
+        <a
+          href="https://github.com/Jxl-s/brainrot-battle"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm font-medium transition-colors hover:text-blue-400 text-gray-300 flex items-center gap-1"
+        >
+          <Github size={18} />
+          <span class="font-semibold underline">GitHub</span>
+        </a>
       </div>
     </div>
   </div>
-</nav> 
+</nav>
