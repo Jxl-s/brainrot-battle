@@ -4,6 +4,8 @@
 
 A fun, interactive web application where users can vote on absurd "brainrot" characters in head-to-head battles. The characters are ranked using an ELO rating system, similar to chess rankings. Partially vibe-coded, and partially written by myself.
 
+Credits to https://brainrot.fandom.com for the images, and for the knowledge.
+
 ## 🎮 Features
 
 - **Battle System**: Head-to-head voting between random pairs of brainrot characters
