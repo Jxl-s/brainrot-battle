@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	interface LeaderboardEntry {
 		id: string;
 		url: string;
@@ -10,8 +8,8 @@
 		rank: number;
 	}
 
-	let leaderboard: LeaderboardEntry[] = [];
-	let loading = true;
+	let leaderboard: LeaderboardEntry[] = $state([]);
+	let loading = $state(true);
 
 	async function fetchLeaderboard() {
 		try {
@@ -25,7 +23,9 @@
 		}
 	}
 
-	onMount(fetchLeaderboard);
+	$effect(() => {
+		fetchLeaderboard();
+	});
 </script>
 
 <svelte:head>
@@ -36,7 +36,9 @@
 	<div class="container-padding">
 		<!-- Header -->
 		<div class="mb-8 text-center">
-			<h1 class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent">
+			<h1
+				class="mb-4 bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-4xl font-bold text-transparent"
+			>
 				Global Leaderboard
 			</h1>
 			<p class="text-gray-300">See which brainrot is dominating the competition!</p>
@@ -95,7 +97,9 @@
 						{#each leaderboard as entry}
 							<tr class="border-b border-gray-700 transition-colors hover:bg-gray-700">
 								<td class="px-6 py-4">
-									<span class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white">
+									<span
+										class="inline-flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-sm font-bold text-white"
+									>
 										{entry.rank}
 									</span>
 								</td>

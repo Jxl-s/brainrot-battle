@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-
 	interface Brainrot {
 		id: string;
 		url: string;
@@ -30,13 +28,13 @@
 		};
 	}
 
-	let currentBattle: Battle | null = null;
-	let isVoting = false;
-	let clickedSide: 'left' | 'right' | null = null;
-	let skipped = false;
+	let currentBattle: Battle | null = $state(null);
+	let isVoting = $state(false);
+	let clickedSide: 'left' | 'right' | null = $state(null);
+	let skipped = $state(false);
 
-	let leftEloDelta = 0;
-	let rightEloDelta = 0;
+	let leftEloDelta = $state(0);
+	let rightEloDelta = $state(0);
 
 	async function handleVote(side: 'left' | 'right') {
 		if (isVoting || !currentBattle) return;
@@ -118,8 +116,8 @@
 		}
 	}
 
-	onMount(async () => {
-		await fetchNewBattle();
+	$effect(() => {
+		fetchNewBattle();
 	});
 </script>
 
@@ -156,7 +154,7 @@
 										? 'loser fade-out'
 										: ''
 						}`}
-						on:click={() => handleVote('left')}
+						onclick={() => handleVote('left')}
 						disabled={isVoting}
 					>
 						<img
@@ -225,7 +223,7 @@
 										? 'loser fade-out'
 										: ''
 						}`}
-						on:click={() => handleVote('right')}
+						onclick={() => handleVote('right')}
 						disabled={isVoting}
 					>
 						<img
@@ -296,7 +294,7 @@
 
 			<!-- Skip Button -->
 			<div class="mt-8 text-center">
-				<button class="btn-primary" on:click={handleSkip} disabled={isVoting}>
+				<button class="btn-primary" onclick={handleSkip} disabled={isVoting}>
 					Skip This Battle
 				</button>
 			</div>
