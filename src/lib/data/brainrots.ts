@@ -113,6 +113,24 @@ export const brainrots: BrainrotData[] = [
 		name: 'Tung Tung Tung Sahur',
 		imageUrl: 'brainrot/tung-tung-tung-sahur.webp',
 		description: 'A terrifying anomaly, do not call it three times'
+	},
+	{
+		id: "burbaloni-luliloli",
+		name: "Burbaloni Luliloli",
+		imageUrl: "brainrot/burbaloni-luliloli.webp",
+		description: "The coconut capypara",
+	},
+	{
+		id: "bobrito-bandito",
+		name: "Bobrito Bandito",
+		imageUrl: "brainrot/bobrito-bandito.webp",
+		description: "The most dangerous bob in the world",
+	},
+	{
+		id: "trulimero-trulichina",
+		name: "Trulimero Trulichina",
+		imageUrl: "brainrot/trulimero-trulichina.webp",
+		description: "Very fast animal that can walk and swim at the same time",
 	}
 ];
 
