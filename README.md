@@ -28,3 +28,7 @@ Brainrot is absurd Internet slang that may lead to someone losing brain cells. E
 2. **Voting**: Users click on their preferred character
 3. **Rating Update**: The ELO ratings of both characters are adjusted based on the outcome
 4. **Leaderboard**: Characters are ranked on the leaderboard based on their current ELO rating
+
+## 🎥 Demonstration
+
+https://github.com/user-attachments/assets/2321ba60-92a5-4f6d-bbc2-642508d74134
