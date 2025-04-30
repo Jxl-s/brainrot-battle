@@ -2,7 +2,7 @@
 
 ![Brainrot Battle](static/hero.webp)
 
-A fun, interactive web application where users can vote on absurd "brainrot" characters in head-to-head battles. The characters are ranked using an ELO rating system, similar to chess rankings.
+A fun, interactive web application where users can vote on absurd "brainrot" characters in head-to-head battles. The characters are ranked using an ELO rating system, similar to chess rankings. Partially vibe-coded, and partially written by myself.
 
 ## 🎮 Features
 
