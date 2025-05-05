@@ -104,6 +104,8 @@
 		rightEloDelta = 0;
 		skipped = false;
 		isVoting = false;
+		// set the current images to none
+		currentBattle = null;
 	}
 
 	async function fetchNewBattle() {
