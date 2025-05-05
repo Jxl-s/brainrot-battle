@@ -106,17 +106,17 @@ export async function getOrCreateBrainrotRecord(brainrotId: string): Promise<Bra
 }
 
 export async function getRandomPair(): Promise<{ left: string; right: string } | null> {
-	// Get all brainrots from our data file
 	const allBrainrots = getAllBrainrots();
-
 	if (allBrainrots.length < 2) return null;
 
-	// Get two random brainrots
-	const shuffled = [...allBrainrots].sort(() => 0.5 - Math.random());
+	const firstIndex = Math.floor(Math.random() * allBrainrots.length);
+
+	let secondIndex = Math.floor(Math.random() * (allBrainrots.length - 1));
+	if (secondIndex >= firstIndex) secondIndex++;
 
 	return {
-		left: shuffled[0].id,
-		right: shuffled[1].id
+		left: allBrainrots[firstIndex].id,
+		right: allBrainrots[secondIndex].id
 	};
 }
 
@@ -179,4 +179,3 @@ export async function getLeaderboard(
 		rank: index + 1
 	}));
 }
-
